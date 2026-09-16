@@ -65,6 +65,27 @@ st.caption("Day 3 Lab: Pure Python Web Frontend with Streamlit")
 # m1, m2, m3, m4 = st.columns(4)
 # m1.metric("Total Books", summary.get("total_books", 0))
 # ...
+summary = generate_library_summary(books)
+
+m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+with m_col1:
+    st.metric(label="Total de Livros", value=summary.get("total_books", 0))
+with m_col2:
+    st.metric(
+        label="Disponíveis na Estante",
+        value=summary.get("available_books", 0),
+        delta=f"{summary.get('available_books', 0)} prontos",
+    )
+with m_col3:
+    st.metric(
+        label="Emprestados",
+        value=summary.get("borrowed_books", 0),
+        delta=f"-{summary.get('borrowed_books', 0)} fora" if summary.get("borrowed_books", 0) > 0 else "Nenhum",
+        delta_color="inverse",
+    )
+with m_col4:
+    avg_yr = summary.get("average_year", 0.0)
+    st.metric(label="Ano Médio de Lançamento", value=f"{avg_yr:.1f}" if avg_yr > 0 else "N/A")
 
 st.info("👉 Complete TODO 1 in app.py to render library status metrics cards here.")
 
