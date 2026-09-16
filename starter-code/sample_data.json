@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "The Pragmatic Programmer",
+    "author": "Andrew Hunt, David Thomas",
+    "year": 1999,
+    "genres": ["Software Engineering", "Career"],
+    "is_available": true
+  },
+  {
+    "id": 2,
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "year": 2008,
+    "genres": ["Software Engineering", "Best Practices"],
+    "is_available": false
+  },
+  {
+    "id": 3,
+    "title": "Fluent Python",
+    "author": "Luciano Ramalho",
+    "year": 2021,
+    "genres": ["Python", "Programming"],
+    "is_available": true
+  },
+  {
+    "id": 4,
+    "title": "Refactoring: Improving the Design of Existing Code",
+    "author": "Martin Fowler",
+    "year": 1999,
+    "genres": ["Software Engineering", "Refactoring"],
+    "is_available": true
+  }
+]
+

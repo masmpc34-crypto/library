@@ -1,0 +1,10 @@
+[project]
+name = "library-dashboard"
+version = "0.1.0"
+description = "Streamlit Library Management Dashboard & Inventory System"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "streamlit>=1.35.0",
+    "pandas>=2.0.0",
+]
