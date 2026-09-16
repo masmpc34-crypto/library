@@ -83,17 +83,22 @@ tab_browse, tab_add, tab_circulation = st.tabs(
 with tab_browse:
     st.subheader("Filter & Search Catalog")
 
-    # 1. Create filter controls using st.columns([1, 2]):
-    #    - Left column: st.selectbox("Filter by Genre", ["All Genres"] + ...)
-    #    - Right column: st.text_input("Search by Author or Title")
-    #
-    # 2. Filter the `books` list using your backend functions:
-    #    - find_books_by_genre(books, selected_genre)
-    #    - Substring search on title/author
-    #
-    # 3. Convert the list of dicts to a pandas DataFrame:
-    #    df = pd.DataFrame(...)
-    #    st.dataframe(df, use_container_width=True, hide_index=True)
+    f_col1, f_col2 = st.columns([1, 2])
+    with f_col1:
+        genres = ["Todos os Gêneros"] + summary.get("unique_genres", [])
+        selected_genre = st.selectbox("Filtrar por Gênero", options=genres)
+    with f_col2:
+        search_query = st.text_input("Buscar por Autor ou Título", placeholder="Digite termos de busca...")
+
+    filtered = books
+    if selected_genre != "Todos os Gêneros":
+        filtered = find_books_by_genre(filtered, selected_genre)
+    if search_query.strip():
+        q = search_query.strip().lower()
+        filtered = [b for b in filtered if q in b.get("title", "").lower() or q in b.get("author", "").lower()]
+
+    df = pd.DataFrame(filtered)
+    st.dataframe(df, use_container_width=True, hide_index=True)
 
     st.info("👉 Complete TODO 2 in app.py to display the searchable book catalog.")
 
