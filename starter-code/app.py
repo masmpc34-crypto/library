@@ -103,20 +103,24 @@ with tab_browse:
 # ===================================================================
 with tab_add:
     st.subheader("Register a New Book into the Catalog")
-
-    # 1. Create a form with: with st.form("add_book_form", clear_on_submit=True):
-    # 2. Input fields:
-    #    - new_title = st.text_input("Book Title *")
-    #    - new_author = st.text_input("Author(s) *")
-    #    - new_year = st.number_input("Publication Year *", min_value=1500, max_value=2050, value=2024)
-    #    - new_genres_raw = st.text_input("Genres (comma-separated) *")
-    #    - submit_btn = st.form_submit_button("Register Book")
-    #
-    # 3. When submitted:
-    #    - Build candidate book dictionary
-    #    - Call backend validate_book(candidate_book) inside a try/except ValueError block
-    #    - Append to books and call save_books(DATA_FILE, books)
-    #    - Show st.success(...) and st.rerun()
+    with st.form("form_cadastro_livro", clear_on_submit=True):
+        new_title = st.text_input("Título da Obra *")
+        new_author = st.text_input("Autor(es) *")
+        new_year = st.number_input("Ano de Publicação *", min_value=1500, max_value=2050, value=2024)
+        new_genres = st.text_input("Gêneros (separados por vírgula) *")
+        if st.form_submit_button("Cadastrar Livro", type="primary"):
+            next_id = max([b.get("id", 0) for b in books], default=0) + 1
+            candidate = {"id": next_id, "title": new_title.strip(), "author": new_author.strip(),
+                         "year": int(new_year), "genres": [g.strip() for g in new_genres.split(",") if g.strip()],
+                         "is_available": True}
+            try:
+                validate_book(candidate)  # Validação no backend!
+                books.append(candidate)
+                save_books(DATA_FILE, books)
+                st.success(f"Registrado com sucesso #{next_id}: {candidate['title']}!")
+                st.rerun()
+            except ValueError as e:
+                st.error(f"Erro de Validação: {e}")
 
     st.info("👉 Complete TODO 3 in app.py to implement book registration.")
 
