@@ -156,17 +156,25 @@ with tab_add:
 # ===================================================================
 with tab_circulation:
     st.subheader("Circulation Operations")
+    avail = [b for b in books if b.get("is_available")]
+    opts = {f"#{b['id']}: {b['title']}": b["id"] for b in avail}
+    chosen = st.selectbox("Livro:", list(opts.keys()))
+    borrower = st.text_input("Nome do Aluno:")
 
-    # 1. Split into two columns: Checkout (left) and Return (right)
-    # 2. For Checkout:
-    #    - Filter available books: [b for b in books if b.get("is_available", False)]
-    #    - Use st.selectbox to pick a book and st.text_input for borrower name
-    #    - On button click, call backend checkout_book(books, book_id, borrower)
-    #    - Call save_books(DATA_FILE, books) and st.rerun()
-    # 3. For Return:
-    #    - Filter borrowed books: [b for b in books if not b.get("is_available", False)]
-    #    - Use st.selectbox to pick a book
-    #    - On button click, call backend return_book(books, book_id)
-    #    - Call save_books(DATA_FILE, books) and st.rerun()
+    if st.button("Realizar Empréstimo"):
+        receipt = checkout_book(books, opts[chosen], borrower)
+        save_books(DATA_FILE, books)
+        st.success(f"Emprestado para {receipt['borrower']}!")
+        st.rerun()
+
+    out = [b for b in books if not b.get("is_available")]
+    ret_opts = {f"#{b['id']}: {b['title']}": b["id"] for b in out}
+    ret_chosen = st.selectbox("Devolver Livro:", list(ret_opts.keys()))
+    
+    if st.button("Confirmar Devolução"):
+        receipt = return_book(books, ret_opts[ret_chosen])
+        save_books(DATA_FILE, books)
+        st.success(f"Devolvido: {receipt['title']}!")
+        st.rerun()
 
     st.info("👉 Complete TODO 4 in app.py to implement checkout and return workflows.")
